@@ -1,0 +1,52 @@
+
+forme du pied
+
+listener sur les attribute onChange
+==================================================================
+var lost = {
+	loc : "Island",
+	get location () {
+		return this.loc;
+	},
+	set location(val) {
+		this.loc = val;
+	}
+};
+lost.location = "Another island";
+==================================================================
+Object.defineProperty(document.body, "description", {
+	get : function () {
+		return this.desc;
+	},
+	set : function (val) {
+		this.desc = val;
+	}
+});
+document.body.description = "Content container";
+==================================================================
+function onPropertyChange(o, callback){
+    for(var p in o){
+        if(o.hasOwnProperty(p)){
+            var originalVal = o[p];
+            Object.defineProperty(o, p, {
+               get: function(){
+                   return originalVal;
+               },
+               set: function(val){
+                   callback.call(o, p, val);
+                   return originalVal = val;
+               }
+            });
+        }
+    }
+}
+
+var Settings = {
+    color: localStorage.color || "red",
+    size : localStorage.size  || "12px"
+};
+
+onPropertyChange(Settings, function(p, val){
+    localStorage[p] = val;
+});  
+==================================================================
